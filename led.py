@@ -7,18 +7,17 @@ Doxygen style docstring for the file (change this!)"""
 def led_setup ():
     """! Doxygen style docstring for this function """
     pinA0 = pyb.Pin(pyb.Pin.board.PA0, pyb.Pin.OUT_PP)
-    pinA0.high()
-    pinA0.low()
+    tim2 = pyb.Timer(2, freq=1)
+    ch1 = tim2.channel(1, pyb.Timer.PWM_INVERTED, pin=pinA0)
+    return ch1
 
-def led_brightness ():
+def led_brightness (x,ch):
+    
     """! Doxygen style docstring for this function """
-    More function code here
+    ch.pulse_width_percent(x)
 
-if __name__ == "__main__":
-    # PWM
-    while True:
-        pinA0.value(0)
-        # utime.sleep(2)
-        pinA0.value(1)
-        # utime.sleep(2)
+ch1 = led_setup()
+while True:
+    led_brightness(50, ch1)
+        
     
