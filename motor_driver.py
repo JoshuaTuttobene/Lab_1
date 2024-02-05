@@ -22,6 +22,8 @@ class MotorDriver:
         tim3 = pyb.Timer(3, freq=20000)
         ch2 = tim3.channel(2, pyb.Timer.PWM, pin=pin2A)
         
+        pin_ENA.high()
+        
         self.ch1 = ch1
         self.ch2 = ch2
         
