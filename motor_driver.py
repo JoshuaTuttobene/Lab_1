@@ -1,35 +1,31 @@
 
 import micropython
+import pyb
 import utime
+
 class MotorDriver:
     """! 
     This class implements a motor driver for an ME405 kit. 
     """
 
-    def __init__ (self):
+    def __init__ (self, en_pin, in1pin, in2pin, timer):
         """! 
         Creates a motor driver by initializing GPIO
         pins and turning off the motor for safety. 
         @param en_pin (There will be several parameters)
         """
-        pin_ENA = pyb.Pin(pyb.Pin.cpu.A10, pyb.Pin.OUT_PP)
         
-        pin1A = pyb.Pin.cpu.B4
-        tim3 = pyb.Timer(3, freq=20000)
-        ch1 = tim3.channel(1, pyb.Timer.PWM, pin=pin1A)
-        
-        pin2A = pyb.Pin.cpu.B5
-        tim3 = pyb.Timer(3, freq=20000)
-        ch2 = tim3.channel(2, pyb.Timer.PWM, pin=pin2A)
-        
-        pin_ENA.high()
-        
-        self.ch1 = ch1
-        self.ch2 = ch2
+        # Set up for each parameter. This will be called in other program
+        self.en_pin = en_pin
+        self.in1pin = in1pin
+        self.in2pin = in2pin
+        self.timer = timer
+        self.ch1 = timer.channel(1, pyb.Timer.PWM, pin=in1pin)
+        self.ch2 = timer.channel(2, pyb.Timer.PWM, pin=in2pin)
         
         print ("Creating a motor driver")
 
-    def set_duty_cycle (self,level1,level2):
+    def set_duty_cycle (self,level):
         """!
         This method sets the duty cycle to be sent
         to the motor to the given level. Positive values
@@ -38,9 +34,39 @@ class MotorDriver:
         @param level A signed integer holding the duty
                cycle of the voltage sent to the motor 
         """
-        print (f"Setting duty cycle to {level1}")
-        self.ch1.pulse_width_percent(level1)
-        self.ch2.pulse_width_percent(level2)
         
-motor = MotorDriver()
-motor.set_duty_cycle(100,0)
+        print (f"Setting duty cycle to {level}")
+        while True:
+            try:
+                level = int(level)
+                break
+            except:
+                print("type an integer from -100 to 100")
+                level = 0
+            
+        # Clockwise
+        if level > 0 and level <= 100:
+            self.ch1.pulse_width_percent(level)
+            self.ch2.pulse_width_percent(0)
+        
+        # Counter Clockwise
+        elif level < 0 and level >= -100:
+            self.ch1.pulse_width_percent(0)
+            self.ch2.pulse_width_percent(-level)
+        
+        # Braking
+        elif level == 0:
+            self.ch1.pulse_width_percent(0)
+            self.ch2.pulse_width_percent(0)
+        
+        # Anything else is 'invalid'
+        else:
+            print("type an integer from -100 to 100")
+            
+    def enable(self):
+        # To enable the motor
+        self.en_pin.high()
+        
+    def disable(self):
+        # to disable the motor
+        self.en_pin.low()
