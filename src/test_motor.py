@@ -11,7 +11,6 @@ if __name__ == "__main__":
     tim3 = pyb.Timer(3, freq=20000)
     motor = MD.MotorDriver(encoder_pin, in1pin, in2pin, tim3)
     motor.enable()
-    
-while True:
-    user = input()
-    motor.set_duty_cycle(user)
+    while True:
+        user = input()
+        motor.set_duty_cycle(user)
