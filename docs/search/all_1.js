@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['motor_5fdriver_2epy_0',['motor_driver.py',['../motor__driver_8py.html',1,'']]],
-  ['motordriver_1',['MotorDriver',['../classmotor__driver_1_1_motor_driver.html',1,'motor_driver']]]
+  ['disable_0',['disable',['../classmotor__driver_1_1_motor_driver.html#a831c4c7447c350ce6ef5bd427a50a31e',1,'motor_driver::MotorDriver']]]
 ];

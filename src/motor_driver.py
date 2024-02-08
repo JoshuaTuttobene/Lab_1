@@ -1,15 +1,11 @@
 """!
 @file motor_driver.py
-Run real or simulated dynamic response tests and plot the results. This program
-demonstrates a way to make a simple GUI with a plot in it. It uses Tkinter, an
-old-fashioned and ugly but useful GUI library which is included in Python by
-default.
-
-This file is based loosely on an example found at
-https://matplotlib.org/stable/gallery/user_interfaces/embedding_in_tk_sgskip.html
+Creates a motor driver class that contains all code needed to run motors.
+The class within this file can be used to enable and disable motors as well
+as control speed and direction.
 
 @author Aaron Escamilla, Karen Morales De Leon, Joshua Tuttobene
-@date   02/05/2024 Original program, based on example from above listed source
+@date   02/05/2024 Original program
 @copyright (c) 2023 by Spluttflob and released under the GNU Public Licenes V3
 """
 
@@ -25,8 +21,12 @@ class MotorDriver:
     def __init__ (self, en_pin, in1pin, in2pin, timer):
         """! 
         Creates a motor driver by initializing GPIO
-        pins and turning off the motor for safety. 
-        @param en_pin (There will be several parameters)
+        pins and disabling the motor for safety. The motor
+        then must be enabled before use.
+        @param en_pin pin used to enable or disable motor
+        @param in1pin first GPIO pin initialized for motor control
+        @param in2pin second GPIO pin initialized for motor control
+        @param timer timer to be used
         """
         
         # Set up for each parameter. This will be called in other program
@@ -79,9 +79,15 @@ class MotorDriver:
             print("type an integer from -100 to 100")
             
     def enable(self):
+        """!
+        Sets pin high to enable motor
+        """
         # To enable the motor
         self.en_pin.high()
         
     def disable(self):
+        """!
+        Sets pin low to disable motor
+        """
         # to disable the motor
         self.en_pin.low()
